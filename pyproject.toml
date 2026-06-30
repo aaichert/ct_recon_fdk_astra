@@ -37,7 +37,10 @@ reconstruct = "ct_recon_fdk_astra.reconstruct:main"
 
 
 [tool.setuptools]
-packages = ["ct_recon_fdk_astra", "ct_recon_fdk_astra.gui", "ct_recon_fdk_astra.fileformats"]
+packages = ["ct_recon_fdk_astra", "ct_recon_fdk_astra.gui", "ct_recon_fdk_astra.fileformats", "fileformats"]
+
+[tool.setuptools.package-dir]
+fileformats = "ct_recon_fdk_astra/fileformats"
 
 [tool.setuptools.package-data]
 "ct_recon_fdk_astra" = ["data/**/*"]

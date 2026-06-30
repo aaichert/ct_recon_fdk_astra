@@ -6,13 +6,13 @@
     ],
     "voxel_dimensions": [576, 576, 384],
     "model_matrix": [
-        [0.4994, 0.0, 5.604e-14, -143.8],
-        [7.67e-27, 0.4994, -6.851e-14, -143.8],
-        [-5.598e-14, 6.843e-14, 0.5, -96.0],
+        [0.4994, 0.0, 5.673e-14, -143.8],
+        [7.772e-27, 0.4994, -6.858e-14, -143.8],
+        [-5.666e-14, 6.85e-14, 0.5, -96.0],
         [0.0, 0.0, 0.0, 1.0]
     ],
-    "output_file": "../fullscan_180views_600x400.nrrd",
+    "output_file": "../fullscan_180views_600x400_hard.nrrd",
     "convert_to_line_integral": false,
     "filter_type": "ram-lak",
-    "mask_cylinder": true
+    "mask_cylinder": 1.0
 }

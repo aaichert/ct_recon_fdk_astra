@@ -2131,7 +2131,7 @@ class ReconstructionGUIApp(QMainWindow):
         filter_layout.addWidget(self.filter_combo)
 
         self.chk_use_memmap = QCheckBox("Use Disk Memory-Mapping (Low RAM)")
-        self.chk_use_memmap.setChecked(True)
+        self.chk_use_memmap.setChecked(False)
         self.chk_use_memmap.stateChanged.connect(self.on_use_memmap_changed)
 
         line_integral_layout = QHBoxLayout()
@@ -3846,7 +3846,7 @@ class ReconstructionGUIApp(QMainWindow):
             self.filter_combo.blockSignals(False)
 
         # Update use_memmap checkbox from config
-        use_memmap = config.get("use_memmap", True)
+        use_memmap = config.get("use_memmap", False)
         self.chk_use_memmap.blockSignals(True)
         self.chk_use_memmap.setChecked(use_memmap)
         self.chk_use_memmap.blockSignals(False)

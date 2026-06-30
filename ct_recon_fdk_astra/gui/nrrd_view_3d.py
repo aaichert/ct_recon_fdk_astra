@@ -4,8 +4,8 @@ import os
 import json
 import numpy as np
 import nrrd
-from PyQt6.QtCore import Qt, QPointF, QRectF, pyqtSignal
-from PyQt6.QtGui import QImage, QPixmap, QPainter, QTransform, QFont, QColor, QKeyEvent, QPen
+from PyQt6.QtCore import Qt, QPointF, QRectF, pyqtSignal, QUrl
+from PyQt6.QtGui import QImage, QPixmap, QPainter, QTransform, QFont, QColor, QKeyEvent, QPen, QDesktopServices
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTabWidget, QLabel, QSlider, QSpinBox, QDoubleSpinBox, QPushButton, QRadioButton,
@@ -334,10 +334,20 @@ class NrrdView3DWindow(QMainWindow):
         control_layout.addLayout(file_io_layout)
 
         # Volume selector dropdown (visible only when multiple volumes are loaded)
+        self.volume_layout = QHBoxLayout()
         self.volume_combo = QComboBox()
         self.volume_combo.setVisible(False)
         self.volume_combo.currentIndexChanged.connect(self._on_combo_changed)
-        control_layout.addWidget(self.volume_combo)
+        self.volume_layout.addWidget(self.volume_combo)
+
+        self.btn_reveal_dir = QPushButton("📁")
+        self.btn_reveal_dir.setToolTip("Reveal active volume directory in file browser")
+        self.btn_reveal_dir.setFixedWidth(28)
+        self.btn_reveal_dir.setVisible(False)
+        self.btn_reveal_dir.clicked.connect(self.reveal_active_volume_dir)
+        self.volume_layout.addWidget(self.btn_reveal_dir)
+
+        control_layout.addLayout(self.volume_layout)
 
         # Tab Widget
         self.tabs = QTabWidget()
@@ -640,7 +650,9 @@ class NrrdView3DWindow(QMainWindow):
         for i, (fp, _data, _hdr) in enumerate(self._volumes):
             self.volume_combo.addItem(self._combo_label(i + 1, fp))
         self.volume_combo.setCurrentIndex(self._active_volume_idx)
-        self.volume_combo.setVisible(len(self._volumes) > 1)
+        show_combo = len(self._volumes) > 1
+        self.volume_combo.setVisible(show_combo)
+        self.btn_reveal_dir.setVisible(show_combo)
         self.volume_combo.blockSignals(False)
         # Enable auto-contrast per slice automatically once multiple volumes are loaded
         if len(self._volumes) > 1 and not self.chk_auto_contrast.isChecked():
@@ -674,6 +686,14 @@ class NrrdView3DWindow(QMainWindow):
         """Called when the user picks a different entry in the dropdown."""
         if combo_idx != self._active_volume_idx:
             self._activate_volume(combo_idx)
+
+    def reveal_active_volume_dir(self):
+        """Open the active volume's directory in the system file browser."""
+        if hasattr(self, '_volumes') and self._volumes and 0 <= self._active_volume_idx < len(self._volumes):
+            fp = self._volumes[self._active_volume_idx][0]
+            dir_path = os.path.dirname(os.path.abspath(fp))
+            if os.path.exists(dir_path):
+                QDesktopServices.openUrl(QUrl.fromLocalFile(dir_path))
 
     # ------------------------------------------------------------------
     # Key handling – number keys 1-9 switch volumes

@@ -202,6 +202,7 @@ def main(config_path=None):
     if len(image_paths) == 1 and image_paths[0].lower().endswith('.nrrd'):
         print(f"Loading single NRRD projection stack: {image_paths[0]}")
         data, header = nrrd.read(image_paths[0])
+        print(f"Loaded raw NRRD projection stack of shape {data.shape}, data type: {data.dtype} ({(data.nbytes / (1024**3)):.3f} GB)")
         # Transpose from (W, H, num_views) to (num_views, H, W)
         projs = np.transpose(data, (2, 1, 0))
         projs = projs[::skip]
@@ -254,9 +255,11 @@ def main(config_path=None):
         
         # Load first image to get dimensions
         first_img = load_image(image_paths[0])
+        print(f"Loaded first individual projection image of shape {first_img.shape}, data type: {first_img.dtype}")
         if abs(downscale_factor - 1.0) >= 1e-5:
             import scipy.ndimage
             first_img = scipy.ndimage.zoom(first_img, downscale_factor, order=1)
+            print(f"Downscaled first individual projection image to: {first_img.shape}")
         H, W = first_img.shape
         
         # Determine I0_val from the first projection if not specified
@@ -266,7 +269,7 @@ def main(config_path=None):
                 I0_val = 1.0
             print(f"Estimated I0_val: {I0_val}")
             
-        use_memmap = config.get("use_memmap", True)
+        use_memmap = config.get("use_memmap", False)
         if use_memmap:
             # Create a temporary memmap file to store the preprocessed sinogram on disk
             temp_file = tempfile.NamedTemporaryFile(suffix=".bin", dir=data_dir, delete=False)
@@ -307,6 +310,13 @@ def main(config_path=None):
         sys.exit(1)
         
     # 4. Decompose matrices to ASTRA vectors
+    sino_gb = (H * num_views * W * 4) / (1024 ** 3)
+    vol_gb = (Nx * Ny * Nz * 4) / (1024 ** 3)
+    print(f"Projection Summary: {num_views} projections, each {W}x{H} pixels, data type: {p_meas_sino.dtype}")
+    print(f"Sinogram Memory Size: {sino_gb:.3f} GB")
+    print(f"Reconstruction Volume Dimensions: {Nx}x{Ny}x{Nz} voxels")
+    print(f"Reconstruction Volume Memory Size: {vol_gb:.3f} GB")
+    
     print("Decomposing projection matrices to ASTRA vectors...")
     vectors = np.zeros((num_views, 12))
     for i in range(num_views):
