@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ct-recon-fdk-astra"
+version = "0.1.0"
+description = "3D Cone-Beam CT Reconstruction & Epipolar Consistency tools"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Andre Aichert", email = "aaichert@gmail.com"}
+]
+dependencies = [
+    "numpy>=1.20",
+    "pynrrd>=1.1.0",
+    "pillow>=9.0.0",
+    "astra-toolbox>=2.1.0",
+    "ProjectiveGeometry23>=1.2.1",
+    "scipy>=1.0.0",
+    "cvxpy>=1.1.0",
+    "tqdm",
+    "tifffile",
+]
+
+[project.optional-dependencies]
+gui = [
+    "PyQt6>=6.0.0",
+    "svg_snip>=1.2.0",
+]
+
+[project.scripts]
+NrrdView3D = "ct_recon_fdk_astra.gui.nrrd_view_3d:main"
+ReconstructionGUIPy = "ct_recon_fdk_astra.gui.reconstruction_gui:main"
+reconstruct = "ct_recon_fdk_astra.reconstruct:main"
+
+
+[tool.setuptools]
+packages = ["ct_recon_fdk_astra", "ct_recon_fdk_astra.gui", "ct_recon_fdk_astra.fileformats"]
+
+[tool.setuptools.package-data]
+"ct_recon_fdk_astra" = ["data/**/*"]

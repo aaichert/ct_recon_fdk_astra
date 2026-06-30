@@ -1,0 +1,24 @@
+*.nrrd
+*.bin
+*.npz
+*.npy
+*.ipynb
+*.ini
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+ecc_*/
+*.html
+
+# Generated files
+epipolar_consistency/

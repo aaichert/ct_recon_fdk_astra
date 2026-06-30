@@ -1,0 +1,21 @@
+{
+  "data_dir": ".",
+  "ompl_file": "fullscan_90views_600x400.ompl",
+  "image_files": [
+    "fullscan_90views_600x400.nrrd"
+  ],
+  "voxel_dimensions": [
+    220,
+    130,
+    195
+  ],
+  "model_matrix": [
+    [0.97, 0.0, 0.0, -106.7],
+    [0.0, 0.0, -0.97, 94.5],
+    [0.0, -0.97, 0.0, 63.0],
+    [0.0, 0.0, 0.0, 1.0]
+  ],
+  "output_file": "fullscan_90views_600x400_recon.nrrd",
+  "convert_to_line_integral": false,
+  "filter_type": "hann"
+}
