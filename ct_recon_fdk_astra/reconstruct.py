@@ -301,7 +301,8 @@ def main(config_path=None):
                     img = warp(img, tform, order=1, mode="constant", cval=0.0)
             img_att = preprocess_image(img, convert_to_att, I0_val)
             p_meas_sino[:, i, :] = img_att
-        p_meas_sino.flush()
+        if hasattr(p_meas_sino, "flush"):
+            p_meas_sino.flush()
         
     if len(P_list) != num_views:
         print(f"Error: Number of projection matrices ({len(P_list)}) does not match number of views ({num_views}).")

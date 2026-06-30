@@ -2,6 +2,15 @@
 
 This repository contains a python tool for 3D Cone-Beam CT (CBCT) reconstruction, with a tiny example data set.
 
+
+### Video Tutorial
+
+For a visual walkthrough of the project and reconstruction process, watch the video tutorial:
+
+[![Video Tutorial](ct_recon_fdk_astra/data/youtube_preview.jpg)](https://www.youtube.com/watch?v=znY13qPe3qA)
+
+
+
 ## Project Structure & Reference Data
 
 - **`ct_recon_fdk_astra/`**: Main package directory:
@@ -12,6 +21,7 @@ This repository contains a python tool for 3D Cone-Beam CT (CBCT) reconstruction
     - **`fullscan_<N>views_<W>x<H>.zip`**: Zip archive containing projection data.
     - **`*.ompl`**: Projection geometry matrices for the FD-CT views.
     - **`*.json`**: Config file containing settings for reconstructing the example data.
+
 
 
 ## Visualizations
